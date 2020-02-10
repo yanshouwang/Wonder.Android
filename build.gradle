@@ -35,7 +35,10 @@ ext {
     appcompatVersion = '1.1.0'
     constraintlayoutVersion = '1.1.3'
     recyclerviewVersion = '1.1.0'
+    materialVersion = '1.1.0'
+    // Test
     junitVersion = '4.12'
+    // Android Test
     extVersion = '1.1.1'
     espressoVersion = '3.2.0'
     // JavaVersion
