@@ -8,59 +8,22 @@
     android:clipChildren="false"
     tools:context=".MainActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/appbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottom_bar"
-            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:backgroundTint="@color/design_default_color_background"
-            app:fabAlignmentMode="center"
-            app:fabCradleVerticalOffset="0dp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/design_default_color_primary"
-            android:clickable="true"
-            android:translationX="-100dp"
-            app:layout_anchor="@+id/bottom_bar"
-            app:layout_anchorGravity="top|center"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <TextView
+    <dev.yanshouwang.wonder.widget.WonderNavigationView
         android:id="@+id/bnv"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:backgroundTint="@color/colorAccent"
-        android:gravity="center"
-        android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/slider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/appbar_layout"
-        tools:text="@string/app_name" />
-
-    <SeekBar
-        android:id="@+id/slider"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/design_default_color_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bnv" />
+        app:menu="@menu/bnv_menu" />
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/bnv_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

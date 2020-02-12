@@ -125,7 +125,7 @@ public class CircleEdgeTreatment extends EdgeTreatment {
         float startAngle1, startAngle2, startAngle3;
         float sweepAngle1, sweepAngle2, sweepAngle3;
 
-        float center2 = this.mHorizontalOffset;
+        float center2 = this.mHorizontalOffset + this.mRadius;
         float center1 = center2 - distance;
         float center3 = center2 + distance;
 

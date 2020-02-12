@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Wonder</string>
+    <string name="home">首页</string>
+    <string name="hot_spot">热点</string>
+    <string name="vip">会员</string>
+    <string name="profile">我的</string>
 </resources>

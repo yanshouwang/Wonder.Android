@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="menu_board_radius">8dp</dimen>
-    <dimen name="bnv_corner_radius">8dp</dimen>
+    <dimen name="bnv_height">56dp</dimen>
+    <dimen name="bnv_radius">24dp</dimen>
+    <dimen name="bnv_corner_radius">24dp</dimen>
+    <dimen name="bnv_elevation">4dp</dimen>
+    <dimen name="bnv_horizontal_offset">28dp</dimen>
+    <dimen name="bnv_vertical_offset">16dp</dimen>
 </resources>

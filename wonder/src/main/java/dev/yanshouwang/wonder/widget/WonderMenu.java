@@ -1,4 +1,4 @@
 package dev.yanshouwang.wonder.widget;
 
-public class Menu {
+public class WonderMenu {
 }
