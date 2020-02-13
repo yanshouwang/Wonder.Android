@@ -153,4 +153,16 @@ public class CircleEdgeTreatment extends EdgeTreatment {
         shapePath.addArc(left3, top3, right3, bottom3, startAngle3, sweepAngle3);
         shapePath.lineTo(length, 0);
     }
+
+    public float getHorizontalOffset() {
+        return this.mHorizontalOffset;
+    }
+
+    public void setHorizontalOffset(float horizontalOffset) {
+        this.mHorizontalOffset = horizontalOffset;
+    }
+
+    public float getVerticalOffset() {
+        return this.mVerticalOffset;
+    }
 }

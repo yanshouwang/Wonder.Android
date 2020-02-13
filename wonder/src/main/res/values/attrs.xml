@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="WonderNavigationView">
-        <attr name="menu" format="reference" />
-        <attr name="radius" format="dimension" />
-        <attr name="cornerRadius" format="dimension" />
-        <attr name="horizontalOffset" format="dimension" />
-        <attr name="verticalOffset" format="dimension" />
+    <attr name="curveNavigationStyle" format="reference" />
+
+    <declare-styleable name="CurveNavigationView">
+        <attr name="backgroundTint" />
+        <attr name="menu" />
+        <attr name="iconSize" />
+        <attr name="iconTint" format="color" />
+        <attr name="elevation" />
     </declare-styleable>
 </resources>

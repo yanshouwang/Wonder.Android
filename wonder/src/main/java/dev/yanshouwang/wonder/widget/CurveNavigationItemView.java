@@ -18,26 +18,26 @@ import androidx.appcompat.widget.TooltipCompat;
 
 import dev.yanshouwang.wonder.R;
 
-public class WonderNavigationItemView extends FrameLayout implements MenuView.ItemView {
+public class CurveNavigationItemView extends FrameLayout implements MenuView.ItemView {
 
     private final ImageView mIcon;
     private final TextView mLabel;
 
     private MenuItemImpl mItemData;
 
-    public WonderNavigationItemView(@NonNull Context context) {
+    public CurveNavigationItemView(@NonNull Context context) {
         this(context, null);
     }
 
-    public WonderNavigationItemView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public CurveNavigationItemView(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public WonderNavigationItemView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CurveNavigationItemView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public WonderNavigationItemView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CurveNavigationItemView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         final Resources res = this.getResources();
@@ -120,5 +120,13 @@ public class WonderNavigationItemView extends FrameLayout implements MenuView.It
     @Override
     public boolean showsIcon() {
         return true;
+    }
+
+    public int getIconSize() {
+        return this.mIcon.getWidth();
+    }
+
+    public void translateIcon(float verticalOffset) {
+        this.mIcon.setTranslationY(-verticalOffset);
     }
 }

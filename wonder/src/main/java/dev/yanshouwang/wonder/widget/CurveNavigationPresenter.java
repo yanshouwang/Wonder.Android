@@ -10,13 +10,13 @@ import androidx.appcompat.view.menu.MenuPresenter;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.appcompat.view.menu.SubMenuBuilder;
 
-public class WonderNavigationPresenter implements MenuPresenter {
+public class CurveNavigationPresenter implements MenuPresenter {
 
     private static final int NAVIGATION_PRESENTER_ID = 1;
 
-    private WonderNavigationView mNavigationView;
+    private CurveNavigationView mNavigationView;
 
-    public WonderNavigationPresenter(WonderNavigationView navigationView) {
+    public CurveNavigationPresenter(CurveNavigationView navigationView) {
         this.mNavigationView = navigationView;
     }
 
@@ -71,7 +71,7 @@ public class WonderNavigationPresenter implements MenuPresenter {
 
     @Override
     public int getId() {
-        return WonderNavigationPresenter.NAVIGATION_PRESENTER_ID;
+        return CurveNavigationPresenter.NAVIGATION_PRESENTER_ID;
     }
 
     @Override

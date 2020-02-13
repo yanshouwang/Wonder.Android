@@ -1,14 +1,20 @@
 package dev.yanshouwang.wonder.widget;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -26,62 +32,53 @@ import com.google.android.material.shape.ShapeAppearanceModel;
 
 import dev.yanshouwang.wonder.R;
 
-public class WonderNavigationView extends FrameLayout implements MenuView {
+public class CurveNavigationView extends FrameLayout implements MenuView {
 
-    private final MaterialShapeDrawable mDrawable;
+    private static final int DEF_STYLE_RES = R.style.Widget_Wonder_CurveNavigationView;
+
     private final MenuPresenter mPresenter;
     private final MenuInflater mInflater;
     private final MenuBuilder mBuilder;
     private final int mItemHeight;
 
-    public WonderNavigationView(@NonNull Context context) {
+    public CurveNavigationView(@NonNull Context context) {
         this(context, null);
     }
 
-    public WonderNavigationView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+    public CurveNavigationView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, R.attr.curveNavigationStyle);
     }
 
-    public WonderNavigationView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+    public CurveNavigationView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, DEF_STYLE_RES);
     }
 
-    public WonderNavigationView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CurveNavigationView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        this.mDrawable = new MaterialShapeDrawable();
-        this.mPresenter = new WonderNavigationPresenter(this);
+        this.mPresenter = new CurveNavigationPresenter(this);
         this.mInflater = new SupportMenuInflater(context);
         this.mBuilder = new MenuBuilder(context);
 
         //this.mBuilder.addMenuPresenter(this.mPresenter);
+
+        this.setClipChildren(false);
+
         final Resources res = this.getResources();
-        this.mItemHeight = res.getDimensionPixelSize(R.dimen.bnv_height);
-        final float elevation = res.getDimension(R.dimen.bnv_elevation);
+        this.mItemHeight = res.getDimensionPixelSize(R.dimen.bnv_item_height);
+        //float labelSize = res.getDimension(R.dimen.bnv_label_size);
 
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.WonderNavigationView, defStyleAttr, defStyleRes);
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CurveNavigationView, defStyleAttr, defStyleRes);
         try {
-            float defRadius = res.getDimension(R.dimen.bnv_radius);
-            float defCornerRadius = res.getDimension(R.dimen.bnv_corner_radius);
-            float defHorizontalOffset = res.getDimension(R.dimen.bnv_horizontal_offset);
-            float defVerticalOffset = res.getDimension(R.dimen.bnv_vertical_offset);
+            float iconSize = res.getDimension(R.dimen.bnv_icon_size);
+            float radius = a.getDimension(R.styleable.CurveNavigationView_iconSize, iconSize);
+            float elevation = res.getDimension(R.dimen.bnv_elevation);
+            float interpolation = 0f;
+            Drawable drawable = this.createShapeDrawable(radius, elevation, interpolation);
+            ViewCompat.setBackground(this, drawable);
 
-            float radius = a.getDimension(R.styleable.WonderNavigationView_radius, defRadius);
-            float cornerRadius = a.getDimension(R.styleable.WonderNavigationView_radius, defCornerRadius);
-            float horizontalOffset = a.getDimension(R.styleable.WonderNavigationView_radius, defHorizontalOffset);
-            float verticalOffset = a.getDimension(R.styleable.WonderNavigationView_radius, defVerticalOffset);
-
-            EdgeTreatment topEdge = new CircleEdgeTreatment(radius, cornerRadius, horizontalOffset, verticalOffset, false);
-            ShapeAppearanceModel model = ShapeAppearanceModel.builder()
-                    .setTopEdge(topEdge)
-                    .build();
-            this.mDrawable.setShapeAppearanceModel(model);
-            this.mDrawable.setPaintStyle(Paint.Style.FILL);
-            this.mDrawable.setElevation(elevation);
-            ViewCompat.setBackground(this, mDrawable);
-
-            if (a.hasValue(R.styleable.WonderNavigationView_menu)) {
-                int resId = a.getResourceId(R.styleable.WonderNavigationView_menu, 0);
+            if (a.hasValue(R.styleable.CurveNavigationView_menu)) {
+                int resId = a.getResourceId(R.styleable.CurveNavigationView_menu, 0);
                 this.inflateMenu(resId);
             }
         } finally {
@@ -89,12 +86,31 @@ public class WonderNavigationView extends FrameLayout implements MenuView {
         }
     }
 
+    private Drawable createShapeDrawable(float radius, float elevation, float interpolation) {
+        MaterialShapeDrawable shapeDrawable = new MaterialShapeDrawable();
+        EdgeTreatment topEdge = new CircleEdgeTreatment(radius, radius, 0f, radius, false);
+        ShapeAppearanceModel model = ShapeAppearanceModel.builder()
+                .setTopEdge(topEdge)
+                .build();
+        shapeDrawable.setShapeAppearanceModel(model);
+        shapeDrawable.setPaintStyle(Paint.Style.FILL);
+        final Drawable drawable = this.getBackground();
+        if (drawable instanceof ColorDrawable) {
+            final ColorDrawable colorDrawable = (ColorDrawable) drawable;
+            int color = colorDrawable.getColor();
+            ColorStateList fillColor = ColorStateList.valueOf(color);
+            shapeDrawable.setFillColor(fillColor);
+        }
+        shapeDrawable.setElevation(elevation);
+        shapeDrawable.setInterpolation(interpolation);
+        return shapeDrawable;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         final int width = MeasureSpec.getSize(widthMeasureSpec);
-        final int height = MeasureSpec.getSize(heightMeasureSpec);
         final int visibleCount = this.mBuilder.getVisibleItems().size();
         final int totalCount = this.getChildCount();
         final int averageWidth = width / (visibleCount == 0 ? 1 : visibleCount);
@@ -151,10 +167,42 @@ public class WonderNavigationView extends FrameLayout implements MenuView {
         for (int i = 0; i < this.mBuilder.size(); i++) {
             MenuItem item = this.mBuilder.getItem(i);
             final Context context = this.getContext();
-            WonderNavigationItemView itemView = new WonderNavigationItemView(context);
+            CurveNavigationItemView itemView = new CurveNavigationItemView(context);
             itemView.initialize((MenuItemImpl) item, 0);
+            itemView.setOnClickListener(this::animateItemView);
             this.addView(itemView);
         }
+    }
+
+    private void animateItemView(View v) {
+        CurveNavigationItemView itemView = (CurveNavigationItemView) v;
+        float horizontalOffset = itemView.getX() + itemView.getWidth() / 2f - itemView.getIconSize();
+
+        final CircleEdgeTreatment topEdge = this.getTopEdge();
+        if (topEdge.getHorizontalOffset() != horizontalOffset) {
+            topEdge.setHorizontalOffset(horizontalOffset);
+        }
+        for (int i = 0; i < this.getChildCount(); i++) {
+            CurveNavigationItemView wiv = (CurveNavigationItemView) this.getChildAt(i);
+            wiv.translateIcon(0f);
+        }
+
+        final MaterialShapeDrawable drawable = this.getShapeDrawable();
+        ObjectAnimator animator = ObjectAnimator.ofFloat(drawable, "interpolation", 0f, 1f);
+        animator.setInterpolator(new OvershootInterpolator());
+        animator.start();
+        animator.addUpdateListener(animation -> {
+            float verticalOffset = (float) animation.getAnimatedValue() * topEdge.getVerticalOffset();
+            itemView.translateIcon(verticalOffset);
+        });
+    }
+
+    private MaterialShapeDrawable getShapeDrawable() {
+        return (MaterialShapeDrawable) this.getBackground();
+    }
+
+    private CircleEdgeTreatment getTopEdge() {
+        return (CircleEdgeTreatment) this.getShapeDrawable().getShapeAppearanceModel().getTopEdge();
     }
 
     @Override
