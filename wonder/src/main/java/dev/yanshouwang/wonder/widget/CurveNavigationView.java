@@ -96,7 +96,7 @@ public class CurveNavigationView extends ViewGroup implements MenuView {
 
     private Drawable createShapeDrawable(float radius, float elevation, float interpolation) {
         MaterialShapeDrawable shapeDrawable = new MaterialShapeDrawable();
-        EdgeTreatment topEdge = new CircleEdgeTreatment(radius, radius, 0f, radius, false);
+        EdgeTreatment topEdge = new CircleEdgeTreatment(radius, radius, 0f, radius * 0.6f, false);
         ShapeAppearanceModel model = ShapeAppearanceModel.builder()
                 .setTopEdge(topEdge)
                 .build();

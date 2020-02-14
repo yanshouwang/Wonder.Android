@@ -4,5 +4,5 @@
     <dimen name="bnv_item_height">56dp</dimen>
     <dimen name="bnv_icon_size">24dp</dimen>
     <dimen name="bnv_label_size">12sp</dimen>
-    <dimen name="bnv_elevation">8dp</dimen>
+    <dimen name="bnv_elevation">4dp</dimen>
 </resources>
