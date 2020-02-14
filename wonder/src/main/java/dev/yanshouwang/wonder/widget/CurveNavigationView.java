@@ -5,17 +5,17 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,16 +25,24 @@ import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.view.menu.MenuPresenter;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.core.view.ViewCompat;
+import androidx.transition.AutoTransition;
+import androidx.transition.Transition;
+import androidx.transition.TransitionManager;
+import androidx.transition.TransitionSet;
 
 import com.google.android.material.shape.EdgeTreatment;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
 import dev.yanshouwang.wonder.R;
+import dev.yanshouwang.wonder.transition.Deformation;
+import dev.yanshouwang.wonder.transition.Move;
 
-public class CurveNavigationView extends FrameLayout implements MenuView {
+public class CurveNavigationView extends ViewGroup implements MenuView {
 
+    private static final String TAG = CurveNavigationView.class.getSimpleName();
     private static final int DEF_STYLE_RES = R.style.Widget_Wonder_CurveNavigationView;
+    private static final long ACTIVE_ANIMATION_DURATION_MS = 300L;
 
     private final MenuPresenter mPresenter;
     private final MenuInflater mInflater;
@@ -60,7 +68,7 @@ public class CurveNavigationView extends FrameLayout implements MenuView {
         this.mInflater = new SupportMenuInflater(context);
         this.mBuilder = new MenuBuilder(context);
 
-        //this.mBuilder.addMenuPresenter(this.mPresenter);
+        this.mBuilder.addMenuPresenter(this.mPresenter);
 
         this.setClipChildren(false);
 
@@ -141,7 +149,7 @@ public class CurveNavigationView extends FrameLayout implements MenuView {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
+        //super.onLayout(changed, left, top, right, bottom);
 
         final int count = this.getChildCount();
         final int width = right - left;
@@ -163,6 +171,7 @@ public class CurveNavigationView extends FrameLayout implements MenuView {
     }
 
     public void inflateMenu(int resId) {
+        // 暂时放弃 MVP 模式，MenuPresenter.updateMenuView() 这个方法需要进一步理解
         this.mInflater.inflate(resId, this.mBuilder);
         for (int i = 0; i < this.mBuilder.size(); i++) {
             MenuItem item = this.mBuilder.getItem(i);
@@ -178,7 +187,9 @@ public class CurveNavigationView extends FrameLayout implements MenuView {
         CurveNavigationItemView itemView = (CurveNavigationItemView) v;
         float horizontalOffset = itemView.getX() + itemView.getWidth() / 2f - itemView.getIconSize();
 
+        final MaterialShapeDrawable drawable = this.getShapeDrawable();
         final CircleEdgeTreatment topEdge = this.getTopEdge();
+        drawable.setInterpolation(0f);
         if (topEdge.getHorizontalOffset() != horizontalOffset) {
             topEdge.setHorizontalOffset(horizontalOffset);
         }
@@ -187,14 +198,20 @@ public class CurveNavigationView extends FrameLayout implements MenuView {
             wiv.translateIcon(0f);
         }
 
-        final MaterialShapeDrawable drawable = this.getShapeDrawable();
-        ObjectAnimator animator = ObjectAnimator.ofFloat(drawable, "interpolation", 0f, 1f);
-        animator.setInterpolator(new OvershootInterpolator());
-        animator.start();
-        animator.addUpdateListener(animation -> {
-            float verticalOffset = (float) animation.getAnimatedValue() * topEdge.getVerticalOffset();
-            itemView.translateIcon(verticalOffset);
-        });
+        TransitionSet transitionSet = new AutoTransition();
+        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
+        Interpolator interpolator = new OvershootInterpolator();
+        transitionSet.setInterpolator(interpolator);
+        transitionSet.setDuration(ACTIVE_ANIMATION_DURATION_MS);
+        Transition move = new Move();
+        transitionSet.addTransition(move);
+        Transition deformation = new Deformation();
+        transitionSet.addTransition(deformation);
+        TransitionManager.beginDelayedTransition(this, transitionSet);
+
+        drawable.setInterpolation(1f);
+        float verticalOffset = topEdge.getVerticalOffset();
+        itemView.translateIcon(verticalOffset);
     }
 
     private MaterialShapeDrawable getShapeDrawable() {
@@ -216,12 +233,13 @@ public class CurveNavigationView extends FrameLayout implements MenuView {
     }
 
     public void build() {
+        Log.i(TAG, "BUILD");
         for (int i = 0; i < this.mBuilder.size(); i++) {
             MenuItem item = mBuilder.getItem(i);
         }
     }
 
     public void update() {
-
+        Log.i(TAG, "UPDATE");
     }
 }
