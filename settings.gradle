@@ -1,2 +1,2 @@
-include ':demo', ':wonder'
+include ':demo', ':wonder', ':core'
 rootProject.name='Wonder'
