@@ -1,15 +1,11 @@
 package dev.yanshouwang.core.security.cryptography;
 
-import android.util.Xml;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 
-public class CRCTest {
+public abstract class CRCTest {
     private CRC mCRC4ITU;
 
     public CRCTest() {
@@ -20,8 +16,8 @@ public class CRCTest {
     public void calculate_CRC4ITU_123456789_0x07() {
         String str = "123456789";
         byte[] data = str.getBytes(StandardCharsets.US_ASCII);
-        long expected = 0x07;
-        long actual = mCRC4ITU.calculate(data);
+        int expected = 0xCBF43926;
+        int actual = mCRC4ITU.calculate(data);
         Assert.assertEquals(expected, actual);
     }
 }

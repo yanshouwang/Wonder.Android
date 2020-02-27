@@ -45,9 +45,6 @@ import dev.yanshouwang.core.transition.Deformation;
 import dev.yanshouwang.core.transition.Move;
 
 public class CurveNavigationView extends ViewGroup {
-
-    private static final String TAG = CurveNavigationView.class.getSimpleName();
-    private static final String XML_MENU = "menu";
     private static final int DEF_STYLE_RES = R.style.Widget_Wonder_CurveNavigationView;
     private static final long ACTIVE_ANIMATION_DURATION_MS = 300L;
 

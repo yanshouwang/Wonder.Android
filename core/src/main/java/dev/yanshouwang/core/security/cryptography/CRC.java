@@ -1,9 +1,12 @@
 package dev.yanshouwang.core.security.cryptography;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.RestrictTo;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import static androidx.annotation.RestrictTo.Scope.SUBCLASSES;
 
 /**
  * 循环冗余校验 (Cyclic Redundancy Check, CRC)
@@ -51,11 +54,11 @@ public abstract class CRC {
     //region 字段
     public final String name;
     public final int width;
-    public final long poly;
-    public final long init;
+    public final int poly;
+    public final int init;
     public final boolean refIn;
     public final boolean refOut;
-    public final long xorOut;
+    public final int xorOut;
     //endregion
 
     //region 方法
@@ -129,7 +132,7 @@ public abstract class CRC {
      * @param mapping 是否查表
      * @return 自定义 CRC 实例
      */
-    public static CRC create(String name, int width, long poly, long init, boolean refIn, boolean refOut, long xorOut, boolean mapping) {
+    public static CRC create(String name, int width, int poly, int init, boolean refIn, boolean refOut, int xorOut, boolean mapping) {
         return mapping
                 ? new MappingCRC(name, width, poly, init, refIn, refOut, xorOut)
                 : new SimpleCRC(name, width, poly, init, refIn, refOut, xorOut);
@@ -142,7 +145,7 @@ public abstract class CRC {
      * @param crc  校验码
      * @return 校验结果
      */
-    public boolean verify(byte[] data, long crc) {
+    public boolean verify(byte[] data, int crc) {
         long expected = calculate(data);
         return crc == expected;
     }
@@ -160,7 +163,8 @@ public abstract class CRC {
      * @param refOut 输出反转
      * @param xorOut 输入异或值
      */
-    protected CRC(String name, int width, long poly, long init, boolean refIn, boolean refOut, long xorOut) {
+    @RestrictTo(SUBCLASSES)
+    CRC(String name, int width, int poly, int init, boolean refIn, boolean refOut, int xorOut) {
         if (width > 32) {
             throw new IllegalArgumentException("宽度超出范围");
         }
@@ -182,7 +186,7 @@ public abstract class CRC {
      * @param data 数据
      * @return 校验码
      */
-    public abstract long calculate(byte[] data);
+    public abstract int calculate(byte[] data);
     //endregion
     //endregion
 }
