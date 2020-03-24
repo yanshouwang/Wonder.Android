@@ -1,4 +1,4 @@
-package dev.yanshouwang.core;
+package dev.yanshouwang.wonder.launcher;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the layout_app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("dev.yanshouwang.wonder.test", appContext.getPackageName());
+        assertEquals("dev.yanshouwang.wonder.launcher", appContext.getPackageName());
     }
 }

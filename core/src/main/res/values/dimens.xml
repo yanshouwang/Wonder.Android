@@ -5,4 +5,8 @@
     <dimen name="bnv_icon_size">24dp</dimen>
     <dimen name="bnv_label_size">12sp</dimen>
     <dimen name="bnv_elevation">4dp</dimen>
+    <dimen name="indicator_dotSize">8dp</dimen>
+    <dimen name="indicator_dotExtension">8dp</dimen>
+    <dimen name="indicator_dotSpacing">8dp</dimen>
+    <integer name="indicator_count">3</integer>
 </resources>

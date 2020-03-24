@@ -1,2 +1,3 @@
 include ':demo', ':core'
 rootProject.name='Wonder'
+include ':launcher'

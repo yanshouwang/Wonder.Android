@@ -1,4 +1,4 @@
-package dev.yanshouwang.core.widget;
+package dev.yanshouwang.core.view;
 
 import androidx.annotation.NonNull;
 

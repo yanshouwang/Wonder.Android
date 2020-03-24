@@ -7,7 +7,7 @@
     android:clipChildren="false"
     tools:context=".MainActivity">
 
-    <dev.yanshouwang.core.widget.CurveNavigationView
+    <dev.yanshouwang.core.view.CurveNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
