@@ -37,10 +37,11 @@ ext {
     recyclerviewVersion = '1.1.0'
     materialVersion = '1.1.0'
     // Test
-    junitVersion = '4.12'
+    junitVersion = '4.13'
     // Android Test
     extVersion = '1.1.1'
     espressoVersion = '3.2.0'
     // JavaVersion
-    javaVersion = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
