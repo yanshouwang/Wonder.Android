@@ -2,6 +2,7 @@ package dev.yanshouwang.wonder.launcher;
 
 import android.content.ComponentName;
 import android.content.pm.LauncherActivityInfo;
+import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.UserHandle;
@@ -15,13 +16,14 @@ import androidx.recyclerview.widget.SnapHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.yanshouwang.core.view.Indicator;
+import dev.yanshouwang.wonder.core.view.Indicator;
 import dev.yanshouwang.wonder.launcher.compat.LauncherAppsCompat;
 import dev.yanshouwang.wonder.launcher.compat.UserManagerCompat;
 import dev.yanshouwang.wonder.launcher.model.AppModel;
 import dev.yanshouwang.wonder.launcher.views.AppsAdapter;
-import dev.yanshouwang.core.view.PagerSnapHelper;
-import dev.yanshouwang.core.view.GridLayoutManager;
+import dev.yanshouwang.wonder.recyclerview.PagerSnapHelper;
+import dev.yanshouwang.wonder.recyclerview.GridLayoutManager;
+import dev.yanshouwang.wonder.recyclerview.PathLayoutManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,18 +32,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_main);
 
-        RecyclerView appsView = findViewById(R.id.appsView);
-        Indicator indicator = findViewById(R.id.indicator);
+        final RecyclerView appsView = findViewById(R.id.appsView);
+        final Indicator indicator = findViewById(R.id.indicator);
 
-        RecyclerView.LayoutManager layout = new GridLayoutManager(3, 2);
+        //final RecyclerView.LayoutManager layout = new GridLayoutManager(3, 2);
+        final Path path = new Path();
+        path.moveTo(250, 250);
+        path.rLineTo(600, 250);
+        path.rLineTo(-600, 250);
+        path.rLineTo(600, 250);
+        path.rLineTo(-600, 250);
+        final RecyclerView.LayoutManager layout = new PathLayoutManager(path, 10, 2);
         appsView.setLayoutManager(layout);
-        List<AppModel> models = getAppModels();
-        RecyclerView.Adapter adapter = new AppsAdapter(models);
+        final List<AppModel> models = getAppModels();
+        final RecyclerView.Adapter adapter = new AppsAdapter(models);
         appsView.setAdapter(adapter);
-        SnapHelper helper = new PagerSnapHelper();
+        final SnapHelper helper = new PagerSnapHelper();
         helper.attachToRecyclerView(appsView);
-        int count = (int) Math.ceil((float) models.size() / 6);
-        indicator.setCount(count);
+        //int count = (int) Math.ceil((float) models.size() / 6);
+        //indicator.setCount(count);
         appsView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -51,15 +60,15 @@ public class MainActivity extends AppCompatActivity {
                 final int range = recyclerView.computeHorizontalScrollRange();
                 final int extent = recyclerView.computeHorizontalScrollExtent();
                 final float progress = (float) offset / (range - extent);
-                indicator.setProgress(progress);
+                //indicator.setProgress(progress);
             }
         });
         indicator.addOnProgressChangedListener(progress -> {
             final int offset = appsView.computeHorizontalScrollOffset();
             final int range = appsView.computeHorizontalScrollRange();
             final int extent = appsView.computeHorizontalScrollExtent();
-            final float x = progress * (range - extent) - offset;
-            appsView.scrollBy((int) x, 0);
+            final int x = (int) (progress * (range - extent) - offset);
+            appsView.scrollBy(x, 0);
         });
 
         //int visibility = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;

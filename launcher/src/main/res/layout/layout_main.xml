@@ -63,12 +63,11 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <dev.yanshouwang.core.view.Indicator
+    <dev.yanshouwang.wonder.core.view.Indicator
         android:id="@+id/indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:paddingBottom="16dp"
+        android:padding="16dp"
         app:activeColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="parent"

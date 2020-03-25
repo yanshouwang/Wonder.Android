@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="curveNavigationStyle" format="reference" />
-
-    <declare-styleable name="CurveNavigationView">
-        <attr name="backgroundTint" />
-        <attr name="menu" />
-        <attr name="iconSize" />
-        <attr name="iconTint" format="color" />
-        <attr name="elevation" />
-    </declare-styleable>
-
     <declare-styleable name="Indicator">
         <attr name="count" format="integer" />
         <attr name="dotSize" format="dimension" />
