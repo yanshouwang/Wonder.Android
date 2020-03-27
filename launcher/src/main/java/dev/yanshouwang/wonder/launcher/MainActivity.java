@@ -2,7 +2,6 @@ package dev.yanshouwang.wonder.launcher;
 
 import android.content.ComponentName;
 import android.content.pm.LauncherActivityInfo;
-import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.UserHandle;
@@ -20,10 +19,9 @@ import dev.yanshouwang.wonder.core.view.Indicator;
 import dev.yanshouwang.wonder.launcher.compat.LauncherAppsCompat;
 import dev.yanshouwang.wonder.launcher.compat.UserManagerCompat;
 import dev.yanshouwang.wonder.launcher.model.AppModel;
-import dev.yanshouwang.wonder.launcher.views.AppsAdapter;
+import dev.yanshouwang.wonder.launcher.recyclerview.AppsAdapter;
 import dev.yanshouwang.wonder.recyclerview.PagerSnapHelper;
 import dev.yanshouwang.wonder.recyclerview.GridLayoutManager;
-import dev.yanshouwang.wonder.recyclerview.PathLayoutManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,22 +33,19 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView appsView = findViewById(R.id.appsView);
         final Indicator indicator = findViewById(R.id.indicator);
 
-        //final RecyclerView.LayoutManager layout = new GridLayoutManager(3, 2);
-        final Path path = new Path();
-        path.moveTo(250, 250);
-        path.rLineTo(600, 250);
-        path.rLineTo(-600, 250);
-        path.rLineTo(600, 250);
-        path.rLineTo(-600, 250);
-        final RecyclerView.LayoutManager layout = new PathLayoutManager(path, 10, 2);
+        final RecyclerView.LayoutManager layout = new GridLayoutManager(3, 3);
+        //final Path path = new Path();
+        //path.addArc(250, 300, 850, 1000, -90, 180);
+        //final RecyclerView.LayoutManager layout = new PathLayoutManager(path, 15, 3);
         appsView.setLayoutManager(layout);
         final List<AppModel> models = getAppModels();
         final RecyclerView.Adapter adapter = new AppsAdapter(models);
         appsView.setAdapter(adapter);
         final SnapHelper helper = new PagerSnapHelper();
         helper.attachToRecyclerView(appsView);
-        //int count = (int) Math.ceil((float) models.size() / 6);
-        //indicator.setCount(count);
+        final int pageSize = 3 * 3;
+        final int pageCount = models.size() / pageSize + (models.size() % pageSize > 0 ? 1 : 0);
+        indicator.setCount(pageCount);
         appsView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -60,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 final int range = recyclerView.computeHorizontalScrollRange();
                 final int extent = recyclerView.computeHorizontalScrollExtent();
                 final float progress = (float) offset / (range - extent);
-                //indicator.setProgress(progress);
+                indicator.setProgress(progress);
             }
         });
         indicator.addOnProgressChangedListener(progress -> {

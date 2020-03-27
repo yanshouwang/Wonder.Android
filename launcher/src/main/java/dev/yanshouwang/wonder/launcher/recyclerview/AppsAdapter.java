@@ -1,4 +1,4 @@
-package dev.yanshouwang.wonder.launcher.views;
+package dev.yanshouwang.wonder.launcher.recyclerview;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -13,13 +13,14 @@ import java.util.List;
 
 public class PathLayoutManager extends RecyclerView.LayoutManager {
     private static final String TAG = PathLayoutManager.class.getSimpleName();
+    private static final boolean DEBUG = true;
 
     private final List<KeyPoint> mKeyPoints;
     private final int mStep;
     @RecyclerView.Orientation
     private final int mOrientation;
 
-    private int mOffset;
+    private int mY;
 
     public PathLayoutManager(@NonNull Path path, int count, int step, @RecyclerView.Orientation int orientation) {
         if (count <= 0 || step <= 0) {
@@ -82,15 +83,35 @@ public class PathLayoutManager extends RecyclerView.LayoutManager {
 
     @Override
     public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        int travel = dy;
-        final int offset = mOffset + dy;
-        if (offset < 0) {
-            travel = 0;
+        if (state.isPreLayout()) {
+            Log.d(TAG, "preLayout");
         }
-        final int oldStart = calculateStart();
-        mOffset += travel;
-        final int newStart = calculateStart();
-        if (newStart != oldStart) {
+        int travel = -dy;
+        final int head0 = findHeadVisibleChildPosition();
+        final int tail0 = findTailVisibleChildPosition();
+        final int j0 = calculateStartKeyPointPosition();
+        mY += travel;
+        final int head1 = findHeadVisibleChildPosition();
+        final int tail1 = findTailVisibleChildPosition();
+        final int j1 = calculateStartKeyPointPosition();
+        if (j1 != j0) {
+            // 回收子视图
+            if (head0 != -1) {
+                if (head1 == -1) {
+                    removeAndRecycleAllViews(recycler);
+                } else {
+                    for (int i = tail0; i >= head0; i--) {
+                        if (i < head1 || i > tail1) {
+                            final int index = i - head0;
+                            if (DEBUG) {
+                                Log.d(TAG, "回收子视图：" + index);
+                            }
+                            removeAndRecycleViewAt(index, recycler);
+                        }
+                    }
+                }
+            }
+            // 更新布局
             onLayoutChildren(recycler, state);
         }
         return travel;
@@ -99,48 +120,94 @@ public class PathLayoutManager extends RecyclerView.LayoutManager {
     @Override
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
         final int itemCount = state.getItemCount();
-        if (itemCount == 0) {
+        final int i0 = findHeadVisibleChildPosition();
+        // 未实现预加载
+        // 如果子视图数量为 0 或者未找到可见子视图，回收所有子视图
+        if (state.isPreLayout() || itemCount == 0 || i0 == -1) {
             removeAndRecycleAllViews(recycler);
             return;
         }
+        // 重新布局
+        final int i1 = findTailVisibleChildPosition();
+        // 缓存所有子视图
         detachAndScrapAttachedViews(recycler);
-
-        final int i0 = findFirstVisibleIndex();
-        Log.i(TAG, "第一个可见视图索引： " + i0);
-        final int start = calculateStart();
-        Log.i(TAG, "关键点起始索引： " + start);
-        final int loopCount = (mKeyPoints.size() - start) / mStep + ((mKeyPoints.size() - start) % mStep > 0 ? 1 : 0);
-        for (int i = 0; i < loopCount; i++) {
-            final int j = i0 + i;
-            if (j >= itemCount) {
-                break;
-            }
-            final KeyPoint keyPoint = mKeyPoints.get(i * mStep + start);
-            final View child = recycler.getViewForPosition(j);
+        int j = calculateStartKeyPointPosition() + i0 * mStep;
+        for (int i = i0; i <= i1; i++) {
+            final View child = recycler.getViewForPosition(i);
             addView(child);
             measureChildWithMargins(child, 0, 0);
             final int width = getDecoratedMeasuredWidth(child);
             final int height = getDecoratedMeasuredHeight(child);
+            final KeyPoint keyPoint = mKeyPoints.get(j);
             final int left = (int) keyPoint.x - width / 2;
             final int top = (int) keyPoint.y - height / 2;
             final int right = left + width;
             final int bottom = top + height;
-            layoutDecorated(child, left, top, right, bottom);
             final float rotation = (float) keyPoint.degrees;
+            layoutDecoratedWithMargins(child, left, top, right, bottom);
             child.setRotation(rotation);
+
+            j += mStep;
         }
     }
 
-    private int findFirstVisibleIndex() {
-        final int interval = getWidth() / 5 / mStep;
-        final int index = mOffset / interval;
-        return index % mStep == 0 ? index / mStep : index / mStep + 1;
+    private void removeAndRecycleViews(RecyclerView.Recycler recycler, int i0, int i1) {
+        if (i0 == i1) {
+            return;
+        }
+        if (DEBUG) {
+            Log.d(TAG, "回收视图：" + i0 + " ~ " + i1);
+        }
+        if (i0 < i1) {
+            for (int i = i1 - 1; i >= i0; i--) {
+                removeAndRecycleViewAt(i, recycler);
+            }
+        } else {
+            for (int i = i0; i > i1; i--) {
+                removeAndRecycleViewAt(i, recycler);
+            }
+        }
     }
 
-    private int calculateStart() {
-        final int interval = getWidth() / 5 / mStep;
-        final int start = mStep - (mOffset / interval) % mStep;
-        return start == mStep ? 0 : start;
+    private int findHeadVisibleChildPosition() {
+        int i0 = -1;
+        final int jn = mKeyPoints.size() - 1;
+        int j = calculateStartKeyPointPosition();
+        final int itemCount = getItemCount();
+        for (int i = 0; i < itemCount; i++) {
+            if (j < 0) {
+                j += mStep;
+            } else if (j > jn) {
+                break;
+            } else {
+                i0 = i;
+                break;
+            }
+        }
+        return i0;
+    }
+
+    private int findTailVisibleChildPosition() {
+        int i1 = -1;
+        final int jn = mKeyPoints.size() - 1;
+        int j = calculateStartKeyPointPosition();
+        final int itemCount = getItemCount();
+        for (int i = 0; i < itemCount; i++) {
+            if (j < 0) {
+                j += mStep;
+            } else if (j > jn) {
+                break;
+            } else {
+                i1 = i;
+                j += mStep;
+            }
+        }
+        return i1;
+    }
+
+    private int calculateStartKeyPointPosition() {
+        final int distance = getWidth() / 10;
+        return mY / distance;
     }
 
     private static class KeyPoint {

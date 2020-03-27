@@ -1,9 +1,8 @@
-package dev.yanshouwang.wonder.launcher.views;
+package dev.yanshouwang.wonder.launcher.recyclerview;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
