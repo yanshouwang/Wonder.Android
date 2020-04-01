@@ -5,7 +5,6 @@ import android.content.pm.LauncherActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.UserHandle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +19,8 @@ import dev.yanshouwang.wonder.launcher.compat.LauncherAppsCompat;
 import dev.yanshouwang.wonder.launcher.compat.UserManagerCompat;
 import dev.yanshouwang.wonder.launcher.model.AppModel;
 import dev.yanshouwang.wonder.launcher.recyclerview.AppsAdapter;
-import dev.yanshouwang.wonder.recyclerview.PagerSnapHelper;
-import dev.yanshouwang.wonder.recyclerview.GridLayoutManager;
+import dev.yanshouwang.wonder.recyclerview.MultiGridLayoutManager;
+import dev.yanshouwang.wonder.recyclerview.MultiGridSnapHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView appsView = findViewById(R.id.appsView);
         final Indicator indicator = findViewById(R.id.indicator);
 
-        final RecyclerView.LayoutManager layout = new GridLayoutManager(3, 3);
+        final RecyclerView.LayoutManager layout = new MultiGridLayoutManager(3, 4, RecyclerView.HORIZONTAL);
         //final Path path = new Path();
         //path.addArc(250, 300, 850, 1000, -90, 180);
         //final RecyclerView.LayoutManager layout = new PathLayoutManager(path, 15, 3);
@@ -41,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
         final List<AppModel> models = getAppModels();
         final RecyclerView.Adapter adapter = new AppsAdapter(models);
         appsView.setAdapter(adapter);
-        final SnapHelper helper = new PagerSnapHelper();
+        final SnapHelper helper = new MultiGridSnapHelper();
         helper.attachToRecyclerView(appsView);
-        final int pageSize = 3 * 3;
+        final int pageSize = 3 * 4;
         final int pageCount = models.size() / pageSize + (models.size() % pageSize > 0 ? 1 : 0);
         indicator.setCount(pageCount);
         appsView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -51,19 +50,37 @@ public class MainActivity extends AppCompatActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                final int offset = recyclerView.computeHorizontalScrollOffset();
-                final int range = recyclerView.computeHorizontalScrollRange();
-                final int extent = recyclerView.computeHorizontalScrollExtent();
-                final float progress = (float) offset / (range - extent);
-                indicator.setProgress(progress);
+                final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                assert layoutManager != null;
+                if (layoutManager.canScrollHorizontally()) {
+                    final int offset = recyclerView.computeHorizontalScrollOffset();
+                    final int range = recyclerView.computeHorizontalScrollRange();
+                    final int extent = recyclerView.computeHorizontalScrollExtent();
+                    final float progress = (float) offset / (range - extent);
+                    indicator.setProgress(progress);
+                } else {
+                    final int offset = recyclerView.computeVerticalScrollOffset();
+                    final int range = recyclerView.computeVerticalScrollRange();
+                    final int extent = recyclerView.computeVerticalScrollExtent();
+                    final float progress = (float) offset / (range - extent);
+                    indicator.setProgress(progress);
+                }
             }
         });
         indicator.addOnProgressChangedListener(progress -> {
-            final int offset = appsView.computeHorizontalScrollOffset();
-            final int range = appsView.computeHorizontalScrollRange();
-            final int extent = appsView.computeHorizontalScrollExtent();
-            final int x = (int) (progress * (range - extent) - offset);
-            appsView.scrollBy(x, 0);
+            if (layout.canScrollHorizontally()) {
+                final int offset = appsView.computeHorizontalScrollOffset();
+                final int range = appsView.computeHorizontalScrollRange();
+                final int extent = appsView.computeHorizontalScrollExtent();
+                final int x = (int) (progress * (range - extent) - offset);
+                appsView.scrollBy(x, 0);
+            } else {
+                final int offset = appsView.computeVerticalScrollOffset();
+                final int range = appsView.computeVerticalScrollRange();
+                final int extent = appsView.computeVerticalScrollExtent();
+                final int y = (int) (progress * (range - extent) - offset);
+                appsView.scrollBy(0, y);
+            }
         });
 
         //int visibility = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
@@ -109,6 +126,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(this.getClass().getSimpleName(), "onDestroy()!!!!!!!!!!!!!!");
     }
 }
