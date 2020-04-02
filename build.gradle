@@ -1,0 +1,47 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.2'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    // Build
+    compileSdkVersion = 29
+    buildToolsVersion = '29.0.2'
+    minSdkVersion = 21
+    targetSdkVersion = 29
+    versionCode = 1
+    versionName = '1.0'
+    // Dependency
+    appcompatVersion = '1.1.0'
+    constraintlayoutVersion = '1.1.3'
+    recyclerviewVersion = '1.1.0'
+    materialVersion = '1.1.0'
+    // Test
+    junitVersion = '4.13'
+    // Android Test
+    extVersion = '1.1.1'
+    espressoVersion = '3.2.0'
+    // JavaVersion
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}

@@ -1,0 +1,6 @@
+rootProject.name='Wonder'
+include ':launcher'
+include ':core'
+include ':recyclerview'
+include ':material'
+include ':demo'

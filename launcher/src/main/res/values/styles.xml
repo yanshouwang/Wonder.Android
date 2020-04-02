@@ -1,0 +1,43 @@
+<resources>
+    <!-- Launcher theme -->
+    <style name="BaseLauncherTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:colorEdgeEffect">#FF757575</item>
+        <!--        <item name="android:windowActionBar">false</item>-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowShowWallpaper">true</item>
+        <!--        <item name="folderTextColor">?attr/workspaceTextColor</item>-->
+    </style>
+
+    <style name="LauncherTheme" parent="@style/BaseLauncherTheme">
+        <!--        <item name="allAppsScrimColor">#EAFFFFFF</item>-->
+        <!--        <item name="allAppsInterimScrimAlpha">46</item>-->
+        <!--        <item name="allAppsNavBarScrimColor">#66FFFFFF</item>-->
+        <!--        <item name="popupColorPrimary">#FFF</item>-->
+        <!--        <item name="popupColorSecondary">#F5F5F5</item> &lt;!&ndash; Gray 100 &ndash;&gt;-->
+        <!--        <item name="popupColorTertiary">#E0E0E0</item> &lt;!&ndash; Gray 300 &ndash;&gt;-->
+        <!--        <item name="isMainColorDark">false</item>-->
+        <!--        <item name="isWorkspaceDarkText">false</item>-->
+        <!--        <item name="workspaceTextColor">@android:color/white</item>-->
+        <!--        <item name="workspaceShadowColor">#B0000000</item>-->
+        <!--        <item name="workspaceAmbientShadowColor">#33000000</item>-->
+        <!--        <item name="workspaceKeyShadowColor">#44000000</item>-->
+        <!--        <item name="workspaceStatusBarScrim">@drawable/workspace_bg</item>-->
+        <!--        <item name="widgetsTheme">@style/WidgetContainerTheme</item>-->
+        <!--        <item name="folderDotColor">?android:attr/colorPrimary</item>-->
+        <!--        <item name="folderFillColor">#CDFFFFFF</item>-->
+        <!--        <item name="folderIconBorderColor">?android:attr/colorPrimary</item>-->
+        <!--        <item name="folderTextColor">#FF212121</item>-->
+        <!--        <item name="loadingIconColor">#CCFFFFFF</item>-->
+
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">#00000000</item>
+        <item name="android:navigationBarColor">#00000000</item>
+    </style>
+    <!-- A derivative project can extend these themes to customize the application theme without
+             affecting the base theme -->
+    <style name="AppTheme" parent="@style/LauncherTheme" />
+</resources>
