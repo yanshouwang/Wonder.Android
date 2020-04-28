@@ -17,9 +17,9 @@ public class MultiGridSnapHelper extends SnapHelper {
     private static final String TAG = MultiGridSnapHelper.class.getSimpleName();
     private static final float MILLISECONDS_PER_INCH = 40f;
 
-    private RecyclerView mRecyclerView;
-    private OrientationHelper mHorizontalHelper;
-    private OrientationHelper mVerticalHelper;
+    private RecyclerView _recyclerView;
+    private OrientationHelper _horizontalHelper;
+    private OrientationHelper _verticalHelper;
     //endregion
 
     //region 方法
@@ -34,17 +34,17 @@ public class MultiGridSnapHelper extends SnapHelper {
     }
 
     private OrientationHelper getHorizontalHelper(RecyclerView.LayoutManager layoutManager) {
-        if (mHorizontalHelper == null || mHorizontalHelper.getLayoutManager() != layoutManager) {
-            mHorizontalHelper = OrientationHelper.createHorizontalHelper(layoutManager);
+        if (_horizontalHelper == null || _horizontalHelper.getLayoutManager() != layoutManager) {
+            _horizontalHelper = OrientationHelper.createHorizontalHelper(layoutManager);
         }
-        return mHorizontalHelper;
+        return _horizontalHelper;
     }
 
     private OrientationHelper getVerticalHelper(RecyclerView.LayoutManager layoutManager) {
-        if (mVerticalHelper == null || mVerticalHelper.getLayoutManager() != layoutManager) {
-            mVerticalHelper = OrientationHelper.createVerticalHelper(layoutManager);
+        if (_verticalHelper == null || _verticalHelper.getLayoutManager() != layoutManager) {
+            _verticalHelper = OrientationHelper.createVerticalHelper(layoutManager);
         }
-        return mVerticalHelper;
+        return _verticalHelper;
     }
 
     private int distanceToPageCenter(@NonNull RecyclerView.LayoutManager layoutManager, @NonNull View targetView, OrientationHelper helper) {
@@ -229,7 +229,7 @@ public class MultiGridSnapHelper extends SnapHelper {
     public void attachToRecyclerView(@Nullable RecyclerView recyclerView) throws IllegalStateException {
         super.attachToRecyclerView(recyclerView);
 
-        mRecyclerView = recyclerView;
+        _recyclerView = recyclerView;
     }
 
     @Nullable
@@ -238,14 +238,14 @@ public class MultiGridSnapHelper extends SnapHelper {
         if (!(layoutManager instanceof RecyclerView.SmoothScroller.ScrollVectorProvider)) {
             return null;
         }
-        return new LinearSmoothScroller(mRecyclerView.getContext()) {
+        return new LinearSmoothScroller(_recyclerView.getContext()) {
             @Override
             protected void onTargetFound(View targetView, RecyclerView.State state, Action action) {
-                if (mRecyclerView == null) {
+                if (_recyclerView == null) {
                     // The associated RecyclerView has been removed so there is no action to take.
                     return;
                 }
-                final RecyclerView.LayoutManager layoutManager1 = mRecyclerView.getLayoutManager();
+                final RecyclerView.LayoutManager layoutManager1 = _recyclerView.getLayoutManager();
                 if (layoutManager1 == null) {
                     return;
                 }

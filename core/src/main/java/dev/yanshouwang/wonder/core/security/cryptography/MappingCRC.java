@@ -6,7 +6,7 @@ import java.util.Hashtable;
 import dev.yanshouwang.wonder.core.util.BinaryUtils;
 
 class MappingCRC extends CRC {
-    private final Dictionary<Byte, Integer> mCRCs;
+    private final Dictionary<Byte, Integer> _crcs;
 
     /**
      * 构造函数
@@ -22,7 +22,7 @@ class MappingCRC extends CRC {
     MappingCRC(String name, int width, int poly, int init, boolean refIn, boolean refOut, int xorOut) {
         super(name, width, poly, init, refIn, refOut, xorOut);
 
-        mCRCs = createCRCs();
+        _crcs = createCRCs();
     }
 
     private Dictionary<Byte, Integer> createCRCs() {
@@ -67,7 +67,7 @@ class MappingCRC extends CRC {
             int unsigned = BinaryUtils.toUnsignedInt(item, refIn);
             // 字节算法: 本字节的 CRC, 等于上一字节的 CRC 左移八位, 与上一字节的 CRC 高八位同本字节异或后对应 CRC 的异或值
             byte key = (byte) ((crc >> Math.max(width - 8, 0)) ^ unsigned);
-            int value = mCRCs.get(key);
+            int value = _crcs.get(key);
             crc = (crc << 8) ^ value;
         }
         crc >>= Math.max(8 - width, 0);

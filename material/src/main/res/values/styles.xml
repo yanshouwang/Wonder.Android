@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.MaterialComponents.CurveNavigationView" parent="">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="android:elevation">@dimen/bnv_elevation</item>
+        <item name="iconSize">@dimen/bnv_icon_size</item>
+    </style>
+</resources>

@@ -32,17 +32,14 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView appsView = findViewById(R.id.appsView);
         final Indicator indicator = findViewById(R.id.indicator);
 
-        final RecyclerView.LayoutManager layout = new MultiGridLayoutManager(3, 4, RecyclerView.HORIZONTAL);
-        //final Path path = new Path();
-        //path.addArc(250, 300, 850, 1000, -90, 180);
-        //final RecyclerView.LayoutManager layout = new PathLayoutManager(path, 15, 3);
+        final RecyclerView.LayoutManager layout = new MultiGridLayoutManager(4, 3, RecyclerView.VERTICAL);
         appsView.setLayoutManager(layout);
         final List<AppModel> models = getAppModels();
         final RecyclerView.Adapter adapter = new AppsAdapter(models);
         appsView.setAdapter(adapter);
         final SnapHelper helper = new MultiGridSnapHelper();
         helper.attachToRecyclerView(appsView);
-        final int pageSize = 3 * 4;
+        final int pageSize = 4 * 3;
         final int pageCount = models.size() / pageSize + (models.size() % pageSize > 0 ? 1 : 0);
         indicator.setCount(pageCount);
         appsView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -82,14 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 appsView.scrollBy(0, y);
             }
         });
-
-        //int visibility = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        //container.setSystemUiVisibility(visibility);
-
-//        PackageManager pm = getPackageManager();
-//        Intent intent = new Intent(Intent.ACTION_MAIN, null);
-//        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-//        pm.queryIntentActivities(intent, PackageManager.GET_META_DATA);
     }
 
     private List<AppModel> getAppModels() {

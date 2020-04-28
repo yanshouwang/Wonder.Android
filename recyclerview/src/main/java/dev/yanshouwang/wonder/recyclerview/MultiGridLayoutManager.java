@@ -6,7 +6,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -23,13 +22,13 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
     //endregion
 
     //region 字段
-    private final int mRowCount;
-    private final int mColumnCount;
+    private final int _rowCount;
+    private final int _columnCount;
     @RecyclerView.Orientation
-    private final int mOrientation;
+    private final int _orientation;
 
-    private int mX;
-    private int mY;
+    private int _x;
+    private int _y;
     //endregion
 
     //region 构造
@@ -38,27 +37,27 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
     }
 
     public MultiGridLayoutManager(int rowCount, int columnCount, @RecyclerView.Orientation int orientation) {
-        mRowCount = rowCount;
-        mColumnCount = columnCount;
-        mOrientation = orientation;
+        _rowCount = rowCount;
+        _columnCount = columnCount;
+        _orientation = orientation;
     }
     //endregion
 
     //region 方法
     int getRowCount() {
-        return mRowCount;
+        return _rowCount;
     }
 
     int getColumnCount() {
-        return mColumnCount;
+        return _columnCount;
     }
 
     int getX() {
-        return mX;
+        return _x;
     }
 
     int getY() {
-        return mY;
+        return _y;
     }
 
     @NonNull
@@ -66,13 +65,13 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
         final Map<Integer, Integer> headers = new HashMap<>();
         final int itemCount = state.getItemCount();
         final int availableWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-        final int itemWidth = availableWidth / mColumnCount;
+        final int itemWidth = availableWidth / _columnCount;
         final int remainderWidth = availableWidth % itemWidth;
         final int left = getPaddingLeft() - itemWidth;
         final int right = getWidth() - getPaddingRight();
-        int x = getPaddingLeft() + remainderWidth / 2 + mX;
+        int x = getPaddingLeft() + remainderWidth / 2 + _x;
         for (int i = 0; i < itemCount; i++) {
-            final int rowNumber = i / mColumnCount % mRowCount;
+            final int rowNumber = i / _columnCount % _rowCount;
             if (rowNumber != 0) {
                 continue;
             }
@@ -92,13 +91,13 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
         final Map<Integer, Integer> headers = new HashMap<>();
         final int itemCount = state.getItemCount();
         final int availableHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-        final int itemHeight = availableHeight / mRowCount;
+        final int itemHeight = availableHeight / _rowCount;
         final int remainderHeight = availableHeight % itemHeight;
         final int top = getPaddingTop() - itemHeight;
         final int bottom = getHeight() - getPaddingBottom();
-        int y = getPaddingTop() + remainderHeight / 2 + mY;
+        int y = getPaddingTop() + remainderHeight / 2 + _y;
         for (int i = 0; i < itemCount; i++) {
-            final int columnNumber = i % mColumnCount;
+            final int columnNumber = i % _columnCount;
             if (columnNumber != 0) {
                 continue;
             }
@@ -116,17 +115,17 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
     private int restrictScrollHorizontally(RecyclerView.State state, int dx) {
         int distance = dx;
         final int leftMaximum = 0;
-        final int leftCurrent = mX;
+        final int leftCurrent = _x;
         final int leftWanted = leftCurrent - distance;
         if (leftWanted > leftMaximum) {
             distance = leftCurrent - leftMaximum;
         } else {
             final int itemCount = state.getItemCount();
-            final int pageSize = mColumnCount * mRowCount;
+            final int pageSize = _columnCount * _rowCount;
             final int pageCount = itemCount / pageSize + (itemCount % pageSize > 0 ? 1 : 0);
             final int availableWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-            final int itemWidth = availableWidth / mColumnCount;
-            final int pageWidth = itemWidth * mColumnCount;
+            final int itemWidth = availableWidth / _columnCount;
+            final int pageWidth = itemWidth * _columnCount;
             final int totalWidth = pageCount * pageWidth;
             final int rightMinimum = leftMaximum + pageWidth;
             final int rightCurrent = leftCurrent + totalWidth;
@@ -141,17 +140,17 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
     private int restrictScrollVertically(RecyclerView.State state, int dy) {
         int distance = dy;
         final int topMaximum = 0;
-        final int topCurrent = mY;
+        final int topCurrent = _y;
         final int topWanted = topCurrent - distance;
         if (topWanted > topMaximum) {
             distance = topCurrent - topMaximum;
         } else {
             final int itemCount = state.getItemCount();
-            final int pageSize = mColumnCount * mRowCount;
+            final int pageSize = _columnCount * _rowCount;
             final int pageCount = itemCount / pageSize + (itemCount % pageSize > 0 ? 1 : 0);
             final int availableHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-            final int itemHeight = availableHeight / mRowCount;
-            final int pageHeight = itemHeight * mRowCount;
+            final int itemHeight = availableHeight / _rowCount;
+            final int pageHeight = itemHeight * _rowCount;
             final int totalHeight = pageCount * pageHeight;
             final int bottomMinimum = topMaximum + pageHeight;
             final int bottomCurrent = topCurrent + totalHeight;
@@ -171,13 +170,13 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
         final int itemCount = state.getItemCount();
         if (itemCount > 0) {
             final int availableWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-            final int itemWidth = availableWidth / mColumnCount;
+            final int itemWidth = availableWidth / _columnCount;
             final int remainderWidth = availableWidth % itemWidth;
             final int left = getPaddingLeft() - itemWidth;
             final int right = getWidth() - getPaddingRight();
-            int x0 = getPaddingLeft() + remainderWidth / 2 + mX;
+            int x0 = getPaddingLeft() + remainderWidth / 2 + _x;
             for (int i = 0; i < itemCount; i++) {
-                final int rowNumber = i / mColumnCount % mRowCount;
+                final int rowNumber = i / _columnCount % _rowCount;
                 if (rowNumber != 0) {
                     continue;
                 }
@@ -204,13 +203,13 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
         final int itemCount = state.getItemCount();
         if (itemCount > 0) {
             final int availableHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-            final int itemHeight = availableHeight / mRowCount;
+            final int itemHeight = availableHeight / _rowCount;
             final int remainderHeight = availableHeight % itemHeight;
             final int top = getPaddingTop() - itemHeight;
             final int bottom = getHeight() - getPaddingBottom();
-            int y0 = getPaddingTop() + remainderHeight / 2 + mY;
+            int y0 = getPaddingTop() + remainderHeight / 2 + _y;
             for (int i = 0; i < itemCount; i++) {
-                if (i % mColumnCount != 0) {
+                if (i % _columnCount != 0) {
                     continue;
                 }
                 if (y0 > top && y0 < bottom) {
@@ -281,8 +280,8 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
     private void removeAndRecycleViewsHorizontally(RecyclerView.Recycler recycler, RecyclerView.State state, List<Integer> headers) {
         final int maxPosition = state.getItemCount() - 1;
         for (Integer header : headers) {
-            for (int i = 0; i < mRowCount; i++) {
-                final int targetPosition = header + i * mColumnCount;
+            for (int i = 0; i < _rowCount; i++) {
+                final int targetPosition = header + i * _columnCount;
                 if (targetPosition > maxPosition) {
                     break;
                 }
@@ -306,7 +305,7 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
     private void removeAndRecycleViewsVertically(RecyclerView.Recycler recycler, RecyclerView.State state, List<Integer> headers) {
         final int maxPosition = state.getItemCount() - 1;
         for (Integer header : headers) {
-            for (int i = 0; i < mColumnCount; i++) {
+            for (int i = 0; i < _columnCount; i++) {
                 final int targetPosition = header + i;
                 if (targetPosition > maxPosition) {
                     break;
@@ -331,8 +330,8 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
     private void fillHorizontally(RecyclerView.Recycler recycler, RecyclerView.State state, Map<Integer, Integer> headers) {
         final int availableWidth = getWidth() - getPaddingLeft() - getPaddingRight();
         final int availableHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-        final int itemWidth = availableWidth / mColumnCount;
-        final int itemHeight = availableHeight / mRowCount;
+        final int itemWidth = availableWidth / _columnCount;
+        final int itemHeight = availableHeight / _rowCount;
         final int remainderHeight = availableHeight % itemHeight;
         final int widthUsed = availableWidth - itemWidth;
         final int heightUsed = availableHeight - itemHeight;
@@ -343,8 +342,8 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
             final int left = entry.getValue();
             int top = getPaddingTop() + remainderHeight / 2;
             final int right = left + itemWidth;
-            for (int i = 0; i < mRowCount; i++) {
-                final int position = header + i * mColumnCount;
+            for (int i = 0; i < _rowCount; i++) {
+                final int position = header + i * _columnCount;
                 if (position > maxPosition) {
                     break;
                 }
@@ -375,8 +374,8 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
     private void fillVertically(RecyclerView.Recycler recycler, RecyclerView.State state, Map<Integer, Integer> headers) {
         final int availableWidth = getWidth() - getPaddingLeft() - getPaddingRight();
         final int availableHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-        final int itemWidth = availableWidth / mColumnCount;
-        final int itemHeight = availableHeight / mRowCount;
+        final int itemWidth = availableWidth / _columnCount;
+        final int itemHeight = availableHeight / _rowCount;
         final int remainderWidth = availableWidth % itemWidth;
         final int widthUsed = availableWidth - itemWidth;
         final int heightUsed = availableHeight - itemHeight;
@@ -387,7 +386,7 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
             int left = getPaddingLeft() + remainderWidth / 2;
             final int top = entry.getValue();
             final int bottom = top + itemHeight;
-            for (int i = 0; i < mColumnCount; i++) {
+            for (int i = 0; i < _columnCount; i++) {
                 final int position = header + i;
                 if (position > maxPosition) {
                     break;
@@ -430,22 +429,22 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
         if (childCount == 0) {
             return null;
         }
-        final int targetRowNumber = (targetPosition / mColumnCount) % mRowCount;
-        final int targetHeader = targetPosition - targetRowNumber * mColumnCount;
+        final int targetRowNumber = (targetPosition / _columnCount) % _rowCount;
+        final int targetHeader = targetPosition - targetRowNumber * _columnCount;
         int minimum = Integer.MAX_VALUE;
         int maximum = Integer.MIN_VALUE;
         for (int i = 0; i < childCount; i++) {
             final View child = getChildAt(i);
             assert child != null;
             final int position = getPosition(child);
-            final int rowNumber = position / mColumnCount % mRowCount;
-            final int columnNumber = position % mColumnCount;
+            final int rowNumber = position / _columnCount % _rowCount;
+            final int columnNumber = position % _columnCount;
             if (rowNumber != 0) {
                 continue;
             }
             if (columnNumber == 0 && position < minimum) {
                 minimum = position;
-            } else if (columnNumber == mColumnCount - 1 && position > maximum) {
+            } else if (columnNumber == _columnCount - 1 && position > maximum) {
                 maximum = position;
             }
         }
@@ -485,12 +484,12 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
 
     @Override
     public boolean canScrollHorizontally() {
-        return mOrientation == RecyclerView.HORIZONTAL;
+        return _orientation == RecyclerView.HORIZONTAL;
     }
 
     @Override
     public boolean canScrollVertically() {
-        return mOrientation == RecyclerView.VERTICAL;
+        return _orientation == RecyclerView.VERTICAL;
     }
 
     @Override
@@ -503,7 +502,7 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
         fillHorizontally(recycler, state, params.fillHeaders);
         // 移动
         offsetChildrenHorizontal(-distance);
-        mX -= distance;
+        _x -= distance;
         return distance;
     }
 
@@ -517,53 +516,53 @@ public class MultiGridLayoutManager extends RecyclerView.LayoutManager implement
         fillVertically(recycler, state, params.fillHeaders);
         // 移动
         offsetChildrenVertical(-distance);
-        mY -= distance;
+        _y -= distance;
         return distance;
     }
 
     @Override
     public int computeHorizontalScrollExtent(@NonNull RecyclerView.State state) {
         final int availableWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-        final int itemWidth = availableWidth / mColumnCount;
-        return itemWidth * mColumnCount;
+        final int itemWidth = availableWidth / _columnCount;
+        return itemWidth * _columnCount;
     }
 
     @Override
     public int computeVerticalScrollExtent(@NonNull RecyclerView.State state) {
         final int availableHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-        final int itemHeight = availableHeight / mRowCount;
-        return itemHeight * mRowCount;
+        final int itemHeight = availableHeight / _rowCount;
+        return itemHeight * _rowCount;
     }
 
     @Override
     public int computeHorizontalScrollOffset(@NonNull RecyclerView.State state) {
-        return -mX;
+        return -_x;
     }
 
     @Override
     public int computeVerticalScrollOffset(@NonNull RecyclerView.State state) {
-        return -mY;
+        return -_y;
     }
 
     @Override
     public int computeHorizontalScrollRange(@NonNull RecyclerView.State state) {
         final int itemCount = getItemCount();
-        final int pageSize = mColumnCount * mRowCount;
+        final int pageSize = _columnCount * _rowCount;
         final int pageCount = itemCount / pageSize + (itemCount % pageSize > 0 ? 1 : 0);
         final int availableWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-        final int itemWidth = availableWidth / mColumnCount;
-        final int pageWidth = itemWidth * mColumnCount;
+        final int itemWidth = availableWidth / _columnCount;
+        final int pageWidth = itemWidth * _columnCount;
         return pageCount * pageWidth;
     }
 
     @Override
     public int computeVerticalScrollRange(@NonNull RecyclerView.State state) {
         final int itemCount = getItemCount();
-        final int pageSize = mColumnCount * mRowCount;
+        final int pageSize = _columnCount * _rowCount;
         final int pageCount = itemCount / pageSize + (itemCount % pageSize > 0 ? 1 : 0);
         final int availableHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-        final int itemHeight = availableHeight / mRowCount;
-        final int pageHeight = itemHeight * mRowCount;
+        final int itemHeight = availableHeight / _rowCount;
+        final int pageHeight = itemHeight * _rowCount;
         return pageCount * pageHeight;
     }
     //endregion
