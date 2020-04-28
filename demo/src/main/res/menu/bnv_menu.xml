@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bnv_home"
+        android:icon="@drawable/home_vector"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/bnv_hot_spot"
+        android:icon="@drawable/hot_spot_vector"
+        android:title="@string/hot_spot" />
+    <item
+        android:id="@+id/bnv_vip"
+        android:icon="@drawable/vip_vector"
+        android:title="@string/vip" />
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/profile_vector"
+        android:title="@string/profile" />
+</menu>
